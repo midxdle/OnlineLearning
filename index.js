@@ -1,7 +1,6 @@
 const express = require("express");
+const path = require('path');
 const flash = require("connect-flash");
-const events = require("events");
-const eventEmitter = new events.EventEmitter();
 const db = require("./database/mongo");
 
 const app = module.exports = express();
@@ -15,4 +14,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get("/", function () {});
+let homeRouter = require('./routes/home');
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use('/', homeRouter);
