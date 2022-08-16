@@ -6,9 +6,9 @@ const db = require("./database/mongo");
 const app = module.exports = express();
 
 app.use(flash());
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   let messages = require("express-messages")(req, res);
-  res.locals.messages = function (chunk, context, bodies, params) {
+  res.locals.messages = (chunk, context, bodies, params) => {
     return chunk.write(messages());
   };
   next();
