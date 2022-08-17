@@ -1,12 +1,23 @@
- const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 
- let db = () => {
-      mongoose.connect('mongodb+srv://midxdle:fFbE2DpWoxmGTAXF@cluster0.axsj3.mongodb.net/onlineLearning?retryWrites=true&w=majority');
-      let db = mongoose.connection;
-      db.on('error', console.error.bind(console, 'Connection Error!'));
-      db.once('open', () => {
-        console.log('Database Connected...');
-      });
- }
+let db = () => {
+  const uri =
+    "mongodb+srv://midxdle:fFbE2DpWoxmGTAXF@cluster0.axsj3.mongodb.net";
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  client.connect((err) => {
+    const collection = client.db("test").collection("users");
+    client.close();
+  });
+  mongoose
+    .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("connected..."))
+    .catch((err) => console.log(err));
 
- module.exports = db();
+  let db = mongoose.connection;
+};
+
+module.exports = db();
