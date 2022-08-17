@@ -9,7 +9,7 @@ let db = () => {
     useUnifiedTopology: true,
   });
   client.connect((err) => {
-    const collection = client.db("test").collection("users");
+    client.db("test");
     client.close();
   });
   mongoose
