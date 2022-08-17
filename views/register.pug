@@ -1,0 +1,25 @@
+extends base
+
+block content
+ h2.page-header Register
+ p Please register
+ if errors
+  each error, i in errors
+   div.alert.alert-danger #{error.msg}
+ form(method='post', action='/users/register')
+  .form-group
+   label Username
+   input.form-control(name='username', type='text', placeholder='Enter Username')
+  .form-group
+   label Email
+   input.form-control(name='email', type='email', placeholder='Enter Email')
+  .form-group
+   label Password
+   input.form-control(name='password', type='password', placeholder='Enter Password')
+  .form-group
+   label Verify password
+   input.form-control(name='verifyPassword', type='password', placeholder='Verfiy Password')
+  .form-group
+   label Student number
+   input.form-control(name='studentNumber', type='text', placeholder='Enter Student number')
+  input.btn.btn-primary(type='submit', name='submit',value='register')
