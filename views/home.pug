@@ -1,5 +1,15 @@
 extends base
 
 block content
-  h1 Area
-  p Welcome
+  link(href='/stylesheets/home.css', rel='stylesheet')
+  h1 Welcome
+  div(class="first")
+    if courses
+      each course in courses
+        div(class="second")
+          img(src=`${course.image}`)
+          h4 #{course.name}
+          p Details: #{course.details}
+          div Buy it for 
+            span #{course.price}
+          a(href=`/${course._id}`) more...
