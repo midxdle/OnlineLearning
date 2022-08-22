@@ -1,28 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 let courseSchema = mongoose.Schema({
-  name:{
+  name: {
     type: String,
     index: true,
   },
-  price:{
+  price: {
     type: String,
   },
-  image:{
+  image: {
     type: String,
   },
-  details:{
+  details: {
+    type: String,
+  },
+  studentID: {
     type: String,
   },
 });
 
-let course = module.exports = mongoose.model('course', courseSchema);
-
-module.exports.getCourseById = (id, callback) => {
-  course.findById(id, callback);
-}
-
-module.exports.getCourseByname = (name, callback) => {
-  let query = { name: name };
-  course.findOne(query, callback);
-}
+let course = (module.exports = mongoose.model("course", courseSchema));

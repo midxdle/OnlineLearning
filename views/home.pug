@@ -3,13 +3,17 @@ extends base
 block content
   link(href='/stylesheets/home.css', rel='stylesheet')
   h1 Welcome
-  div(class="first")
-    if courses
-      each course in courses
-        div(class="second")
-          img(src=`${course.image}`)
-          h4 #{course.name}
-          p Details: #{course.details}
-          div Buy it for 
-            span #{course.price}
-          a(href=`/${course._id}`) more...
+  div(class="main")
+    div(class="course")
+      if courses
+        each course in courses
+          div(class="courseItems")
+            img(src=`${course.image}`)
+            h4 #{course.name}
+            p Details : #{course.details}
+            div Buy it for 
+              span #{course.price}
+    div(class="content")
+      if contents
+        each content in contents
+          a(href=`/content/${content._id}`) more...
