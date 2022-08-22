@@ -1,0 +1,53 @@
+extends base
+
+block content
+  link(href="/stylesheets/content.css", rel="stylesheet")
+  if problems
+    each problem, i in problems
+      div.alert.alert-danger #{problem.msg}
+  if contents
+    h1 #{contents.name}
+    div(class="main")
+      form(method="post" action=`/content/${contents._id}`)
+        .form-group
+          label Course ID : #{contents.courseID}
+          input.form-control(name="courseID", type="text", placeholder="Enter ID here")
+        .form-group
+          label Username
+          input.form-control(name="username", type="text", placeholder="Enter Username here")
+        .form-group
+          label Password
+          input.form-control(name="password", type="password", placeholder="Enter Password here")
+        input.btn.btn-primary(type="submit", name="submit", value="buy course")
+      div(class="cOne")
+        h4 #{contents.contentOne.name}
+        div(class="handouts")
+          a(href='#') click here for pdf
+          a(href='#') click here for book
+          a(href='#') click here for video
+        div(class="exam")
+          a(href='#') click here for exam
+          p score: #{contents.contentOne.examScore}
+      div(class="cTwo")
+        h4 #{contents.contentTwo.name}
+        div(class="handouts")
+          a(href='#') click here for pdf
+          a(href='#') click here for book
+          a(href='#') click here for video
+        div(class="exam")
+          a(href='#') click here for exam
+          p score: #{contents.contentTwo.examScore}
+      div(class="cThree")
+        h4 #{contents.contentThree.name}
+        div(class="handouts")
+          a(href='#') click here for pdf
+          a(href='#') click here for book
+          a(href='#') click here for video
+        div(class="exam")
+          a(href='#') click here for exam
+          p score: #{contents.contentThree.examScore}
+    div(class="final")
+      a(href='#') click here for final exam
+      p final score: #{contents.finalScore}
+    div(class="certificate")
+      a(href='#') click here for certificate
