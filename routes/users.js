@@ -6,7 +6,7 @@ const localStrategy = require("passport-local").Strategy;
 const user = require("../models/user");
 
 router.get("/", ensureAuthenticated, (req, res, next) => {
-  res.send("404 ERROR PAGE!");
+  res.send("404 PAGE NOT FOUND!");
 });
 
 function ensureAuthenticated(req, res, next) {
@@ -25,15 +25,18 @@ router.get("/login", (req, res, next) => {
   res.render("login", { title: "login" });
 });
 
+
+
 router.post(
   "/login",
   passport.authenticate("local", {
     failureRedirect: "/users/login",
-    failureFlash: "invalid username or password",
+    failureFlash: "نام کاربری یا رمز عبور اشتباه است.",
   }),
   (req, res) => {
-    req.flash("success", "you are now logged in");
+    req.flash("success", "با موفقیت وارد سامانه شدید.");
     res.redirect("/");
+    global.start = new Date().getTime()
   }
 );
 
@@ -74,14 +77,14 @@ router.post("/register", (req, res, next) => {
   let verifyPassword = req.body.verifyPassword;
   let studentNumber = req.body.studentNumber;
 
-  req.checkBody("username", "username is required").notEmpty();
-  req.checkBody("email", "email is required").notEmpty();
-  req.checkBody("email", "email is not valid").isEmail();
-  req.checkBody("password", "password is required").notEmpty();
+  req.checkBody("username", "نام کاربری وارد نشده است.").notEmpty();
+  req.checkBody("email", "رایانامه وارد نشده است.").notEmpty();
+  req.checkBody("email", "رایانامه قابل قبول نیست.").isEmail();
+  req.checkBody("password", "رمز عبور وارد نشده است.").notEmpty();
   req
-    .checkBody("verifyPassword", "passwords do not match")
+    .checkBody("verifyPassword", "رمز عبور تایید نمی شود.")
     .equals(req.body.password);
-  req.checkBody("studentNumber", "student number is required").notEmpty();
+  req.checkBody("studentNumber", "شماره دانشجویی وارد نشده است.").notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {
@@ -98,10 +101,9 @@ router.post("/register", (req, res, next) => {
 
     user.createUser(newUser, (err, user) => {
       if (err) throw err;
-      console.log(user);
     });
 
-    req.flash("success", "user registered");
+    req.flash("success", "در سامانه ثبت نام شدید.");
     res.location("/");
     res.redirect("/");
   }
@@ -112,8 +114,12 @@ router.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("success", "logged out successfuly");
+    req.flash("success", "با موفقیت خارج شدید.");
     res.redirect("/users/login");
+    let end = new Date().getTime()
+    let seconds = end - start;
+    let time = seconds/1000;
+    console.log(time)
   });
 });
 
