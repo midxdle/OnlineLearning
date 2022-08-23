@@ -1,25 +1,25 @@
 extends base
 
 block content
-  h2.page-header Register
-  p Please register
+  h2.page-header ثبت نام در سامانه
+  p لطفا اطلاعات مورد نظر را وارد نمایید.
   if errors
     each error, i in errors
       div.alert.alert-danger #{error.msg}
   form(method='post', action='/users/register')
     .form-group
-      label Username
-      input.form-control(name='username', type='text', placeholder='Enter Username')
+      label نام کاربری :
+      input.form-control(name='username', type='text', placeholder='نام کاربری خود را وارد نمایید')
     .form-group
-      label Email
-      input.form-control(name='email', type='email', placeholder='Enter Email')
+      label رایانامه :
+      input.form-control(name='email', type='email', placeholder='ایمیل خود را وارد نمایید')
     .form-group
-      label Password
-      input.form-control(name='password', type='password', placeholder='Enter Password')
+      label رمز عبور :
+      input.form-control(name='password', type='password', placeholder='رمز عبور خود را وارد نمایید')
     .form-group
-      label Verify password
-      input.form-control(name='verifyPassword', type='password', placeholder='Verfiy Password')
+      label تایید رمز عبور :
+      input.form-control(name='verifyPassword', type='password', placeholder='تاییدیه رمز عبور را وارد نمایید')
     .form-group
-      label Student number
-      input.form-control(name='studentNumber', type='text', placeholder='Enter Student number')
-    input.btn.btn-primary(type='submit', name='submit',value='register')
+      label شماره دانشجویی :
+      input.form-control(name='studentNumber', type='text', placeholder='شماره دانشجویی خود را وارد نمایید')
+    input.btn.btn-primary(type='submit', name='submit',value='ثبت نام')

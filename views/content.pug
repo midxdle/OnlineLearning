@@ -2,52 +2,41 @@ extends base
 
 block content
   link(href="/stylesheets/content.css", rel="stylesheet")
-  if problems
-    each problem, i in problems
-      div.alert.alert-danger #{problem.msg}
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
   if contents
-    h1 #{contents.name}
+    h1 دوره آموزشی #{contents.name}
     div(class="main")
-      form(method="post" action=`/content/${contents._id}`)
-        .form-group
-          label Course ID : #{contents.courseID}
-          input.form-control(name="courseID", type="text", placeholder="Enter ID here")
-        .form-group
-          label Username
-          input.form-control(name="username", type="text", placeholder="Enter Username here")
-        .form-group
-          label Password
-          input.form-control(name="password", type="password", placeholder="Enter Password here")
-        input.btn.btn-primary(type="submit", name="submit", value="buy course")
-      div(class="cOne")
-        h4 #{contents.contentOne.name}
-        div(class="handouts")
-          a(href='#') click here for pdf
-          a(href='#') click here for book
-          a(href='#') click here for video
-        div(class="exam")
-          a(href='#') click here for exam
-          p score: #{contents.contentOne.examScore}
-      div(class="cTwo")
-        h4 #{contents.contentTwo.name}
-        div(class="handouts")
-          a(href='#') click here for pdf
-          a(href='#') click here for book
-          a(href='#') click here for video
-        div(class="exam")
-          a(href='#') click here for exam
-          p score: #{contents.contentTwo.examScore}
-      div(class="cThree")
-        h4 #{contents.contentThree.name}
-        div(class="handouts")
-          a(href='#') click here for pdf
-          a(href='#') click here for book
-          a(href='#') click here for video
-        div(class="exam")
-          a(href='#') click here for exam
-          p score: #{contents.contentThree.examScore}
-    div(class="final")
-      a(href='#') click here for final exam
-      p final score: #{contents.finalScore}
-    div(class="certificate")
-      a(href='#') click here for certificate
+      if !buys
+        form(method="post" action=`/content/${contents._id}`)
+          .form-group
+            label شماره شناسایی دوره : #{contents.courseID}
+            input.form-control(name="courseID", type="text", placeholder="شماره شناسایی را در این قسمت وارد کنید")
+          .form-group
+            label نام کاربری :
+            input.form-control(name="username", type="text", placeholder="نام کاربری را وارد کنید")
+          .form-group
+            label رمز عبور :
+            input.form-control(name="password", type="password", placeholder="رمز عبور را وارد کنید")
+          input.btn.btn-primary(type="submit", name="submit", value="خرید دوره")
+      if buys
+        if subcontents
+          each subcontent in subcontents
+            if !subcontent.lock
+              div(class="contents")
+                h4 محتوای آموزشی #{subcontent.name}
+                div(class="handouts")
+                  a(href='#') جزوه آموزشی
+                  a(href='#') کتاب آموزشی
+                  a(href='#') ویدئو آموزشی
+          if exams
+            each exam in exams
+              if !exam.lock
+                div(class="exam")
+                  if !exam.certificate
+                    a(href=`/content/${contents._id}/${exam._id}`) آزمون : #{exam.name}
+                    p نمره آزمون : #{exam.score}
+                  div(class="certificate")
+                    if exam.certificate
+                      a(href='#') گواهی پایان دوره
