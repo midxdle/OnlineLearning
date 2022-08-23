@@ -1,32 +1,11 @@
 const mongoose = require("mongoose");
 
 let contentSchema = mongoose.Schema({
-  name: {
+  courseID: {
     type: String,
     index: true,
   },
-  contentOne: {
-    type: Object,
-  },
-  contentTwo: {
-    type: Object,
-  },
-  contentThree: {
-    type: Object,
-  },
-  finalExam: {
-    type: String,
-  },
-  finalScore: {
-    type: String,
-  },
-  certificate: {
-    type: String,
-  },
-  lock: {
-    type: Boolean,
-  },
-  courseID: {
+  name: {
     type: String,
   },
 });

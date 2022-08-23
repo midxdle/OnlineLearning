@@ -14,9 +14,6 @@ let courseSchema = mongoose.Schema({
   details: {
     type: String,
   },
-  studentID: {
-    type: String,
-  },
 });
 
 let course = (module.exports = mongoose.model("course", courseSchema));
