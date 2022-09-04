@@ -1,40 +1,53 @@
 const express = require("express");
 const router = express.Router();
-const course = require("../models/course");
 const content = require("../models/content");
 const user = require("../models/user");
 const buy = require("../models/buy");
 const exam = require("../models/exam");
 const subcontent = require("../models/subcontent");
-const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://midxdle:fFbE2DpWoxmGTAXF@cluster0.axsj3.mongodb.net";
 
 router.get("/", ensureAuthenticated, (req, res, next) => {
   res.send("404 PAGE NOT FOUND!");
 });
 
+// content page
 router.get("/:id", ensureAuthenticated, (req, res, next) => {
+  // get user info
+  let getUser = req.user;
+  // find contents by ID
   content.findOne({ _id: req.params.id }, (err, contents) => {
     if (err) throw err;
+    // find subcontents by foregin key
     subcontent.find({ contentID: contents._id }, (err, subcontents) => {
       if (err) throw err;
-      buy.findOne({ courseID: contents.courseID }, (err, buys) => {
-        if (err) throw err;
-        exam.find({ contentID: contents._id }, (err, exams) => {
+      // check if user purchased course or not
+      buy.findOne(
+        { contentID: req.params.id, studentID: getUser._id },
+        (err, buys) => {
           if (err) throw err;
+          if (buys == null) {
+            buys = false;
+          } else {
+            buys = true;
+          }
+          // find exams by ID
+          exam.find({ contentID: contents._id }, (err, exams) => {
+            if (err) throw err;
 
-          res.render("content", {
-            contents: contents,
-            subcontents: subcontents,
-            buys: buys,
-            exams: exams,
+            res.render("content", {
+              contents: contents,
+              subcontents: subcontents,
+              buys: buys,
+              exams: exams,
+            });
           });
-        });
-      });
+        }
+      );
     });
   });
 });
 
+// check if user is authenticated
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -43,17 +56,17 @@ function ensureAuthenticated(req, res, next) {
   res.redirect("/users/login");
 }
 
+// purchase course
 router.post("/:id", (req, res, next) => {
-  let courseID = req.body.courseID;
-  let username = req.body.username;
-  let password = req.body.password;
+  // get user and contentID of course
+  let getUser = req.user;
+  let contentID = req.body.contentID;
 
-  req.checkBody("courseID", "شماره شناسایی دوره وارد نشده است.").notEmpty();
-  req.checkBody("username", "نام کاربری وارد نشده است.").notEmpty();
-  req.checkBody("password", "رمز عبور وارد نشده است").notEmpty();
+  req.checkBody("contentID", "شماره شناسایی دوره وارد نشده است.").notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {
+    // find content ID for redirecting
     content.findOne({ _id: req.params.id }, (err, contents) => {
       if (err) throw err;
 
@@ -62,67 +75,95 @@ router.post("/:id", (req, res, next) => {
       res.redirect(`/content/${contents._id}`);
     });
   } else {
-    user.findOne({ username: username }, (err, user) => {
-      if (err || user === null) {
-        content.findOne({ _id: req.params.id }, (err, contents) => {
-          if (err) throw err;
-
-          req.flash("error", "نام کاربری نامعتبر است.");
+    // find user
+    user.findOne({ _id: getUser._id }, (err, user) => {
+      if (err) throw err;
+      // find content
+      content.findOne({ _id: contentID }, (err, contents) => {
+        if (err) {
+          // if do not find the content show error
+          req.flash("error", "شماره شناسایی نامعتبر است.");
           res.location(`/content/${contents._id}`);
           res.redirect(`/content/${contents._id}`);
-        });
-      } else {
-        course.findOne({ _id: courseID }, (err, courses) => {
-          if (err) {
-            content.findOne({ _id: req.params.id }, (err, contents) => {
-              if (err) throw err;
+        } else {
+          // if find the content make new purchase
+          let newBuy = new buy({
+            contentID: contentID,
+            contentName: contents.name,
+            studentID: getUser._id,
+            stdUsername: getUser.username,
+            stdNumber: getUser.studentNumber,
+          });
 
-              req.flash("error", "شماره شناسایی نامعتبر است.");
-              res.location(`/content/${contents._id}`);
-              res.redirect(`/content/${contents._id}`);
-            });
-          } else {
-            MongoClient.connect(uri, (err, db) => {
-              if (err) throw err;
-              let dbo = db.db("test");
-              let data = {
-                studentID: String(user._id),
-                courseID: String(courses._id),
-              };
-              dbo.collection("buys").insertOne(data, (err) => {
-                if (err) throw err;
-                content.findOne({ _id: req.params.id }, (err, contents) => {
-                  if (err) throw err;
+          // create new purchase
+          buy.createBuy(newBuy, (err) => {
+            if (err) throw err;
+          });
 
-                  req.flash("success", "خرید دوره با موفقیت انجام شد.");
-                  res.location(`/content/${contents._id}`);
-                  res.redirect(`/content/${contents._id}`);
-                  db.close();
-                });
-              });
-            });
-          }
-        });
-      }
+          req.flash("success", "خرید دوره با موفقیت انجام شد.");
+          res.location(`/content/${contents._id}`);
+          res.redirect(`/content/${contents._id}`);
+        }
+      });
     });
   }
 });
 
+// exam page
 router.get("/:id/:id", ensureAuthenticated, (req, res, next) => {
+  // find exam
   exam.findOne({ _id: req.params.id }, (err, exams) => {
     if (err) throw err;
     if (exams === null) {
       next();
     } else {
+      // find content for redirecting and post request route
       content.findOne({ _id: exams.contentID }, (err, contents) => {
         if (err) throw err;
-
-        res.render("exam", { exams: exams, contents: contents });
+        // get present time in miliseconds
+        let startTime = new Date().getTime();
+        // get end time of exam from database in miliseconds
+        let endTime = new Date(exams.endTime).getTime();
+        // create a countDown
+        let timerFunc = setInterval(() => {
+          let timeLeft = endTime - startTime;
+          // calculate hours
+          let hours = Math.floor(
+            (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          // calculate minutes
+          let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          // calculate seconds
+          let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+          // show full time
+          let timer = hours + ":" + minutes + ":" + seconds;
+          // check if time is finished
+          if (timeLeft <= 0) {
+            if (err) throw err;
+            req.flash("error", "زمان آزمون به پایان رسیده است.");
+            res.location(`/content/${contents._id}`);
+            res.redirect(`/content/${contents._id}`);
+          } else {
+            console.log(timer);
+            // find exam for getting exam name and post request route
+            exam.findOne({ _id: req.params.id }, (err, exams) => {
+              if (err) throw err;
+              if (exams === null) {
+                next();
+              } else {
+                res.render("exam", { exams: exams, contents: contents });
+              }
+            });
+          }
+          // destroy countDown
+          clearInterval(timerFunc);
+        }, 1000);
       });
     }
   });
 });
 
+// send exam name and score
 router.post("/:id/:id", (req, res, next) => {
   let name = req.body.name;
   let score = req.body.score;
@@ -132,11 +173,13 @@ router.post("/:id/:id", (req, res, next) => {
 
   const errors = req.validationErrors();
   if (errors) {
+    // find exam for redirecting
     exam.findOne({ _id: req.params.id }, (err, exams) => {
       if (err) throw err;
       if (exams === null) {
         next();
       } else {
+        // find content for redirecting
         content.findOne({ _id: exams.contentID }, (err, contents) => {
           if (err) throw err;
 
@@ -147,16 +190,20 @@ router.post("/:id/:id", (req, res, next) => {
       }
     });
   } else {
+    // find exam by name
     exam.findOne({ name: name }, (err, result) => {
+      // check if exam name exist
       if (err || result === null) {
+        // find exam for redirecting
         exam.findOne({ _id: req.params.id }, (err, exams) => {
           if (err) throw err;
           if (exams === null) {
             next();
           } else {
+            // find content for redirecting
             content.findOne({ _id: exams.contentID }, (err, contents) => {
               if (err) throw err;
-    
+
               req.flash("error", "نام آزمون معتبر نیست");
               res.location(`/content/${contents._id}/${exams._id}`);
               res.redirect(`/content/${contents._id}/${exams._id}`);
@@ -164,7 +211,9 @@ router.post("/:id/:id", (req, res, next) => {
           }
         });
       } else {
+        // check exam score is equal or more than 70
         if (score >= 70 && score < 100) {
+          // find exam by name and update score
           exam.updateOne(
             { name: name },
             {
@@ -172,6 +221,7 @@ router.post("/:id/:id", (req, res, next) => {
             },
             (err) => {
               if (err) throw err;
+              // unlock next exam
               exam.updateOne(
                 { prev: name },
                 {
@@ -179,29 +229,44 @@ router.post("/:id/:id", (req, res, next) => {
                 },
                 (err) => {
                   if (err) throw err;
-                  subcontent.updateOne({ prev: name }, { lock: false }, (err) => {
-                    if (err) throw err;
-                  
-                  exam.findOne({ _id: req.params.id }, (err, exams) => {
-                    if (err) throw err;
-                    if (exams === null) {
-                      next();
-                    } else {
-                      content.findOne({ _id: exams.contentID }, (err, contents) => {
+                  // unlock next content
+                  subcontent.updateOne(
+                    { prev: name },
+                    { lock: false },
+                    (err) => {
+                      if (err) throw err;
+
+                      // find exam for redirecting
+                      exam.findOne({ _id: req.params.id }, (err, exams) => {
                         if (err) throw err;
-    
-                        req.flash("success", "تبریک! شما در این آزمون قبول شدید.");
-                        res.location(`/content/${contents._id}`);
-                        res.redirect(`/content/${contents._id}`);
+                        if (exams === null) {
+                          next();
+                        } else {
+                          // find content for redirecting
+                          content.findOne(
+                            { _id: exams.contentID },
+                            (err, contents) => {
+                              if (err) throw err;
+
+                              req.flash(
+                                "success",
+                                "تبریک! شما در این آزمون قبول شدید."
+                              );
+                              res.location(`/content/${contents._id}`);
+                              res.redirect(`/content/${contents._id}`);
+                            }
+                          );
+                        }
                       });
                     }
-                  });
-                });
+                  );
                 }
               );
             }
           );
+          // check if exam score is under 70
         } else if (score < 70 && score > 0) {
+          // find exam by name and update score 
           exam.updateOne(
             { name: name },
             {
@@ -209,6 +274,7 @@ router.post("/:id/:id", (req, res, next) => {
             },
             (err) => {
               if (err) throw err;
+              // lock next exam if unlocked or do nothing
               exam.updateOne(
                 { prev: name },
                 {
@@ -216,18 +282,26 @@ router.post("/:id/:id", (req, res, next) => {
                 },
                 (err) => {
                   if (err) throw err;
+                  // find exam for redirecting
                   exam.findOne({ _id: req.params.id }, (err, exams) => {
                     if (err) throw err;
                     if (exams === null) {
                       next();
                     } else {
-                      content.findOne({ _id: exams.contentID }, (err, contents) => {
-                        if (err) throw err;
-    
-                        req.flash("success", "نیاز به تلاش بیشتر! شما در این آزمون قبول نشدید.");
-                        res.location(`/content/${contents._id}`);
-                        res.redirect(`/content/${contents._id}`);
-                      });
+                      // find content for redirecting
+                      content.findOne(
+                        { _id: exams.contentID },
+                        (err, contents) => {
+                          if (err) throw err;
+
+                          req.flash(
+                            "success",
+                            "نیاز به تلاش بیشتر! شما در این آزمون قبول نشدید."
+                          );
+                          res.location(`/content/${contents._id}`);
+                          res.redirect(`/content/${contents._id}`);
+                        }
+                      );
                     }
                   });
                 }
@@ -235,14 +309,17 @@ router.post("/:id/:id", (req, res, next) => {
             }
           );
         } else {
+          // chek if exam score is under 0 or more than 100
+          // find exam for redirecting
           exam.findOne({ _id: req.params.id }, (err, exams) => {
             if (err) throw err;
             if (exams === null) {
               next();
             } else {
+              // find content for redirecting
               content.findOne({ _id: exams.contentID }, (err, contents) => {
                 if (err) throw err;
-    
+
                 req.flash("error", "نمره وارد شده معتبر نیست.");
                 res.location(`/content/${contents._id}/${exams._id}`);
                 res.redirect(`/content/${contents._id}/${exams._id}`);
@@ -251,7 +328,7 @@ router.post("/:id/:id", (req, res, next) => {
           });
         }
       }
-    })
+    });
   }
 });
 
