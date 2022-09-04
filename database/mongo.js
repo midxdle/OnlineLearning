@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { MongoClient } = require("mongodb");
 
+// connecting to database
 let db = () => {
   const uri =
     "mongodb+srv://midxdle:fFbE2DpWoxmGTAXF@cluster0.axsj3.mongodb.net";
