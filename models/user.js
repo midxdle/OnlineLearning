@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { Timestamp, Decimal128 } = require("mongodb");
 
 let userSchema = mongoose.Schema({
   username: {
@@ -14,6 +15,9 @@ let userSchema = mongoose.Schema({
   },
   studentNumber: {
     type: String,
+  },
+  studyTime: {
+    type: Decimal128,
   },
 });
 
