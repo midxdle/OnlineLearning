@@ -11,3 +11,7 @@ let contentSchema = mongoose.Schema({
 });
 
 let content = (module.exports = mongoose.model("content", contentSchema));
+
+module.exports.createContent = (newContent, callback) => {
+  newContent.save(callback);
+};
