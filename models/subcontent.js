@@ -29,3 +29,7 @@ let subcontent = (module.exports = mongoose.model(
   "subcontent",
   subcontentSchema
 ));
+
+module.exports.createSubContent = (newSubContent, callback) => {
+  newSubContent.save(callback);
+};
