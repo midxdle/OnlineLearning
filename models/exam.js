@@ -20,6 +20,13 @@ let examSchema = mongoose.Schema({
   certificate: {
     type: Boolean,
   },
+  endTime: {
+    type: String,
+  }
 });
 
 let exam = (module.exports = mongoose.model("exam", examSchema));
+
+module.exports.createExam = (newExam, callback) => {
+  newExam.save(callback);
+};
