@@ -7,36 +7,27 @@ block content
       div.alert.alert-danger #{error.msg}
   if contents
     h1 دوره آموزشی #{contents.name}
-    div(class="main")
       if !buys
-        form(method="post" action=`/content/${contents._id}`)
-          .form-group
-            label شماره شناسایی دوره : #{contents.courseID}
-            input.form-control(name="courseID", type="text", placeholder="شماره شناسایی را در این قسمت وارد کنید")
-          .form-group
-            label نام کاربری :
-            input.form-control(name="username", type="text", placeholder="نام کاربری را وارد کنید")
-          .form-group
-            label رمز عبور :
-            input.form-control(name="password", type="password", placeholder="رمز عبور را وارد کنید")
-          input.btn.btn-primary(type="submit", name="submit", value="خرید دوره")
+        div(class="buy")
+          form(method="post" action=`/content/${contents._id}`)
+            .form-group
+              label شماره شناسایی دوره : #{contents._id}
+              input.form-control(name="contentID", type="text", placeholder="شماره شناسایی را در این قسمت وارد کنید")
+            input.btn.btn-primary(type="submit", name="buy", value="خرید دوره")
+    div(class="main")
       if buys
         if subcontents
           each subcontent in subcontents
-            if !subcontent.lock
+            if !subcontent.lock && !subcontent.certificate
               div(class="contents")
-                h4 محتوای آموزشی #{subcontent.name}
+                h3 محتوای آموزشی #{subcontent.name}
                 div(class="handouts")
                   a(href='#') جزوه آموزشی
                   a(href='#') کتاب آموزشی
                   a(href='#') ویدئو آموزشی
-          if exams
-            each exam in exams
-              if !exam.lock
-                div(class="exam")
-                  if !exam.certificate
-                    a(href=`/content/${contents._id}/${exam._id}`) آزمون : #{exam.name}
-                    p نمره آزمون : #{exam.score}
-                  div(class="certificate")
-                    if exam.certificate
-                      a(href='#') گواهی پایان دوره
+              div(class="exam")
+                a(href=`/content/${contents._id}/${subcontent._id}`) آزمون : #{subcontent.name}
+                p نمره آزمون : #{subcontent.score}
+            div(class="certificate")
+              if subcontent.certificate
+                a(href='#') گواهی پایان دوره

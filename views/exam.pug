@@ -1,16 +1,23 @@
 extends base
 
 block content
-  h2.page-header Exam Page
+  link(href='/stylesheets/exam.css', rel='stylesheet')
+  h2.page-header صفحه آزمون
   if errors
     each error, i in errors
       div.alert.alert-danger #{error.msg}
-  if exams
-    if contents
-      form(method='post', action=`/content/${contents._id}/${exams._id}`)
-        .form-group
-          label Exam name : #{exams.name}
-          input.form-control(name='name', type='text', placeholder='Enter Exam name')
-          label Score :
-          input.form-control(name='score', type='number', placeholder='Enter Score')
-        input.btn.btn-primary(type='submit', name='submit',value='submit')
+  div(class="main")
+    if exams
+      if contents
+        h4 زمان و تاریخ اتمام آزمون : 
+         span D#{exams.endTime}
+        form(method='post', action=`/content/${contents._id}/${exams._id}`)
+          div(class="forms")
+            div(class="subforms")
+              .form-group
+                label نام آزمون : #{exams.name}
+                input.form-control(name='name', type='text', placeholder='نام آزمون را وارد کنید')
+                label نمره آزمون :
+                input.form-control(name='score', type='number', placeholder='نمره آزمون را وارد کنید')
+            div(class="btnform")
+              input.btn.btn-primary(type='submit', name='submit', value='اتمام آزمون')

@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const path = require("path");
-
+// connecting to database
+let db = require("./database/mongo");
 // take routers
 let homeRouter = require("./routes/home");
 let usersRouter = require("./routes/users");
@@ -67,8 +68,8 @@ app.use((req, res, next) => {
 });
 
 // render app root for checking authentications
-//isAuthenticated method in routes
-//if user method in pug format
+// isAuthenticated method in routes
+// if user method in pug format
 app.get("*", (req, res, next) => {
   res.locals.user = req.user || null;
   next();

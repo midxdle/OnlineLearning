@@ -3,7 +3,6 @@ const router = express.Router();
 const content = require("../models/content");
 const user = require("../models/user");
 const buy = require("../models/buy");
-const exam = require("../models/exam");
 const subcontent = require("../models/subcontent");
 
 router.get("/", ensureAuthenticated, (req, res, next) => {
@@ -30,16 +29,11 @@ router.get("/:id", ensureAuthenticated, (req, res, next) => {
           } else {
             buys = true;
           }
-          // find exams by ID
-          exam.find({ contentID: contents._id }, (err, exams) => {
-            if (err) throw err;
 
-            res.render("content", {
-              contents: contents,
-              subcontents: subcontents,
-              buys: buys,
-              exams: exams,
-            });
+          res.render("content", {
+            contents: contents,
+            subcontents: subcontents,
+            buys: buys,
           });
         }
       );
@@ -112,7 +106,7 @@ router.post("/:id", (req, res, next) => {
 // exam page
 router.get("/:id/:id", ensureAuthenticated, (req, res, next) => {
   // find exam
-  exam.findOne({ _id: req.params.id }, (err, exams) => {
+  subcontent.findOne({ _id: req.params.id }, (err, exams) => {
     if (err) throw err;
     if (exams === null) {
       next();
@@ -146,7 +140,7 @@ router.get("/:id/:id", ensureAuthenticated, (req, res, next) => {
           } else {
             console.log(timer);
             // find exam for getting exam name and post request route
-            exam.findOne({ _id: req.params.id }, (err, exams) => {
+            subcontent.findOne({ _id: req.params.id }, (err, exams) => {
               if (err) throw err;
               if (exams === null) {
                 next();
@@ -174,7 +168,7 @@ router.post("/:id/:id", (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     // find exam for redirecting
-    exam.findOne({ _id: req.params.id }, (err, exams) => {
+    subcontent.findOne({ _id: req.params.id }, (err, exams) => {
       if (err) throw err;
       if (exams === null) {
         next();
@@ -191,11 +185,11 @@ router.post("/:id/:id", (req, res, next) => {
     });
   } else {
     // find exam by name
-    exam.findOne({ name: name }, (err, result) => {
+    subcontent.findOne({ name: name }, (err, result) => {
       // check if exam name exist
       if (err || result === null) {
         // find exam for redirecting
-        exam.findOne({ _id: req.params.id }, (err, exams) => {
+        subcontent.findOne({ _id: req.params.id }, (err, exams) => {
           if (err) throw err;
           if (exams === null) {
             next();
@@ -214,7 +208,7 @@ router.post("/:id/:id", (req, res, next) => {
         // check exam score is equal or more than 70
         if (score >= 70 && score < 100) {
           // find exam by name and update score
-          exam.updateOne(
+          subcontent.updateOne(
             { name: name },
             {
               score: score,
@@ -222,7 +216,7 @@ router.post("/:id/:id", (req, res, next) => {
             (err) => {
               if (err) throw err;
               // unlock next exam
-              exam.updateOne(
+              subcontent.updateOne(
                 { prev: name },
                 {
                   lock: false,
@@ -237,7 +231,7 @@ router.post("/:id/:id", (req, res, next) => {
                       if (err) throw err;
 
                       // find exam for redirecting
-                      exam.findOne({ _id: req.params.id }, (err, exams) => {
+                      subcontent.findOne({ _id: req.params.id }, (err, exams) => {
                         if (err) throw err;
                         if (exams === null) {
                           next();
@@ -266,8 +260,8 @@ router.post("/:id/:id", (req, res, next) => {
           );
           // check if exam score is under 70
         } else if (score < 70 && score > 0) {
-          // find exam by name and update score 
-          exam.updateOne(
+          // find exam by name and update score
+          subcontent.updateOne(
             { name: name },
             {
               score: score,
@@ -275,7 +269,7 @@ router.post("/:id/:id", (req, res, next) => {
             (err) => {
               if (err) throw err;
               // lock next exam if unlocked or do nothing
-              exam.updateOne(
+              subcontent.updateOne(
                 { prev: name },
                 {
                   lock: true,
@@ -283,7 +277,7 @@ router.post("/:id/:id", (req, res, next) => {
                 (err) => {
                   if (err) throw err;
                   // find exam for redirecting
-                  exam.findOne({ _id: req.params.id }, (err, exams) => {
+                  subcontent.findOne({ _id: req.params.id }, (err, exams) => {
                     if (err) throw err;
                     if (exams === null) {
                       next();
@@ -311,7 +305,7 @@ router.post("/:id/:id", (req, res, next) => {
         } else {
           // chek if exam score is under 0 or more than 100
           // find exam for redirecting
-          exam.findOne({ _id: req.params.id }, (err, exams) => {
+          subcontent.findOne({ _id: req.params.id }, (err, exams) => {
             if (err) throw err;
             if (exams === null) {
               next();
