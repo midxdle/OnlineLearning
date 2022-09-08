@@ -1,0 +1,21 @@
+extends admin
+
+block content
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  link(href='/stylesheets/admin/user.css', rel='stylesheet')
+  h1 لیست دانشجویان
+  div(class="main")
+    div(class="users")
+      if users
+        each user in users
+          div(class="info")
+            h4 نام کاربری : #{user.username}
+            h4 رایانامه : #{user.email}
+            h4 شماره دانشجویی : 
+              span #{user.studentNumber}
+            p مدت زمان مطالعه : #{user.studyTime} ثانیه
+            div(class="delete")
+              form(method='post', action=`/admin/users/${user._id}`)
+                input.btn.btn-primary(type='submit', name='delete', value='حذف دانشجو')

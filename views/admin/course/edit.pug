@@ -1,0 +1,27 @@
+extends ../admin
+
+block content
+  link(href='/stylesheets/admin/course/edit.css', rel='stylesheet')
+  h2.page-header ویرایش دوره   
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  if course
+    div(class="main")
+      form(method='post', action=`/admin/courses/edit/${course._id}`)
+        div(class="forms")
+          div(class="subforms")
+            .form-group
+              label نام دوره :
+              input.form-control(name='name', type='text', placeholder=`${course.name}`)
+            .form-group
+              label توضیحات :
+              input.form-control(name='details', type='text', placeholder='توضیحات دوره را وارد کنید')
+            .form-group
+              label تصویر :
+              input.form-control(name='image', type='text', placeholder='URL تصویر را وارد کنید')
+            .form-group
+              label قیمت :
+              input.form-control(name='price', type='text', placeholder=`${course.price}`)
+          div(class="btnform")
+            input.btn.btn-primary(type='submit', name='edit', value='تایید')

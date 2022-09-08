@@ -1,0 +1,50 @@
+extends ../teacher
+
+block content
+  link(href='/stylesheets/teacher/content/add.css', rel='stylesheet')
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  h2.page-header اضافه کردن محتوای جدید
+  div(class="main")
+    form(method='post', action='/teacher/contents/add')
+      div(class="forms")
+        div(class="subforms")
+          .form-group
+            label نام محتوا :
+            input.form-control(name='name', type='text', placeholder='نام محتوا را وارد کنید')
+          .form-group
+            label شماره شناسایی محتوا :
+            input.form-control(name='contentID', type='text', placeholder='شماره شناسیایی محتوا را وارد کنید')
+          .form-group
+            label کتاب :
+            input.form-control(name='book', type='text', placeholder='لینک کتاب محتوا را به صورت URL وارد کنید')
+          .form-group
+            label جزوه :
+            input.form-control(name='pdf', type='text', placeholder='لینک جزوه محتوا را به صورت URL وارد کنید')
+          .form-group
+            label ویدئو :
+            input.form-control(name='video', type='text', placeholder='لینک ویدئو محتوا را به صورت URL وارد کنید')
+          .form-group
+            label بستن دسترسی :
+            input.form-control(name='lock', type='boolean', placeholder='true یا false وارد کنید')
+          .form-group
+            label نام محتوای قبلی :
+            input.form-control(name='prev', type='text', placeholder='نام محتوای قبلی را وارد کنید.')
+          .form-group
+            label نمره :
+            input.form-control(name='score', type='text', placeholder='نمره آزمون را وارد کنید')
+          .form-group
+            label مدرک :
+            input.form-control(name='certificate', type='boolean', 
+            placeholder='true یا false وارد کنید')
+          .form-group
+            label تاریخ پایان آزمون :
+            input.form-control(name='endDate', type='date', 
+            placeholder='تاریخ پایان آزمون را وارد کنید')
+          .form-group
+            label ساعت پایان آزمون :
+            input.form-control(name='endHour', type='time', 
+            placeholder='ساعت پایان آزمون را وارد کنید.')
+        div(class="btnform")
+          input.btn.btn-primary(type='submit', name='add', value='ایجاد محتوا')

@@ -1,0 +1,26 @@
+extends ../admin
+
+block content
+  link(href='/stylesheets/admin/course/add.css', rel='stylesheet')
+  h2.page-header اضافه کردن دوره جدید   
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  div(class="main")
+    form(method='post', action='/admin/courses/add')
+      div(class="forms")
+        div(class="subforms")
+          .form-group
+            label نام دوره :
+            input.form-control(name='name', type='text', placeholder='نام دوره را وارد کنید')
+          .form-group
+            label جزئیات :
+            input.form-control(name='details', type='text', placeholder='توضیحات دوره را وارد کنید')
+          .form-group
+            label تصویر :
+            input.form-control(name='image', type='text', placeholder='لینک تصویر دوره را به صورت URL وارد کنید')
+          .form-group
+            label قیمت :
+            input.form-control(name='price', type='text', placeholder='قیمت دوره را به صورت 99 هزار تومان وارد کنید')
+        div(class="btnform")
+          input.btn.btn-primary(type='submit', name='add', value='ایجاد دوره')

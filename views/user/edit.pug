@@ -1,0 +1,30 @@
+extends ../base
+
+block content
+  link(href='/stylesheets/user/edit.css', rel='stylesheet')
+  h2.page-header ویرایش پروفایل کاربری
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  div(class="main")
+    if user
+      form(method='post', action='/profile/edit')
+        div(class="forms")
+          div(class="subforms")
+            .form-group
+              label نام کاربری :
+              input.form-control(name='username', type='text', placeholder=`${user.username}`)
+            .form-group
+              label رایانامه :
+              input.form-control(name='email', type='email', placeholder=`${user.email}`)
+            .form-group
+              label رمز عبور :
+              input.form-control(name='password', type='password', placeholder='رمز عبور خود را وارد نمایید')
+            .form-group
+              label تایید رمز عبور :
+              input.form-control(name='verifyPassword', type='password', placeholder='تاییدیه رمز عبور را وارد نمایید')
+            .form-group
+              label شماره دانشجویی :
+              input.form-control(name='studentNumber', type='text', placeholder=`${user.studentNumber}`)
+          div(class="btnform")
+            input.btn.btn-primary(type='submit', name='submit',value='تایید')

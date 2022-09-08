@@ -1,0 +1,136 @@
+h1 {
+  color: rgb(255, 255, 255);
+  margin: 50px;
+}
+
+.buy {
+  display: flex;
+  padding: 50px;
+  border-radius: 5px;
+  background-color: rgb(56, 75, 114);
+  border: 2px solid #00205c;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: white;
+  padding: 5px;
+  font-size: 25px;
+}
+
+.form-group label:hover {
+  cursor: pointer;
+  color: white;
+  padding: 5px;
+}
+
+.form-group input {
+  border: 1px solid #7195da;
+  margin: 5px;
+}
+
+.btn {
+  padding: 5px;
+  border-radius: 5px;
+  margin: 5px;
+  width: 100px;
+  background-color: #7195da;
+  transition: 0.5s;
+}
+
+.btn:hover {
+  color: white;
+  margin: 5px;
+  background-color: #192335;
+  width: 125px;
+  border-radius: 0px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contents {
+  background-color: rgba(107, 201, 245, 0.527);
+  color: white;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.handouts {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  padding: 25px;
+  border-radius: 5px;
+  background-color: #7d95ff;
+}
+
+.handouts a {
+  text-decoration: none;
+  color: white;
+  transition: 0.5s;
+}
+
+.handouts a:hover {
+  text-decoration: none;
+  color: rgb(8, 3, 87);
+  transition: 0.5s;
+}
+
+.exam {
+  background-color: rgba(107, 201, 245, 0.527);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  color: white;
+  margin-bottom: 25px;
+}
+
+.exam a {
+  text-decoration: none;
+  color: white;
+  transition: 0.5s;
+}
+
+.exam a:hover {
+  background-color: #7195da;
+  padding: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: rgb(8, 3, 87);
+  transition: 0.5s;
+}
+
+.certificate {
+  background-color: rgba(17, 235, 162, 0.534);
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+.certificate a {
+  text-decoration: none;
+  color: white;
+  margin: 25px;
+  transition: 0.5s;
+}
+
+.certificate a:hover {
+  text-decoration: none;
+  color: rgb(2, 39, 11);
+  margin: 25px;
+  transition: 0.5s;
+}

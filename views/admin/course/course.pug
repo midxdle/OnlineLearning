@@ -1,0 +1,34 @@
+extends ../admin
+
+block content
+  link(href='/stylesheets/admin/course/course.css', rel='stylesheet')
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  h1 لیست دوره‌ها
+  div(class="main")
+    div(class="form")
+      form(method='get', action='/admin/courses/add')
+        input.btn.btn-primary(class="button" type='submit', name='create', value='ایجاد دوره')
+      div(class="content")
+        if courses
+          each course in courses
+            div(class="course")
+              img(src=`${course.image}`)
+              h4 نام دوره : #{course.name}
+              p توضیحات : #{course.details}
+              h4 قیمت دوره : 
+                span #{course.price}
+              div(class="edit")
+                form(method='get', action=`/admin/courses/edit/${course._id}`)
+                  input.btn.btn-primary(type='submit', name='edit', value='ویرایش دوره')
+                form(method='post', action=`/admin/courses/${course._id}`)
+                  input.btn.btn-primary(type='submit', name='delete', value='حذف دوره')
+      h1 لیست دوره‌های خریداری شده :
+      div(class="purchased")
+        if buys
+          each buy in buys
+            div(class="details")
+              h4 نام دوره:  #{buy.contentName}
+              h4 نام دانشجو : #{buy.stdUsername}
+              h4 شماره دانشجویی : #{buy.stdNumber}

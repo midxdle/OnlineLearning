@@ -1,0 +1,26 @@
+doctype html
+html(lang='fa')
+  head
+    title سامانه آموزش مجازی
+    link(href='/stylesheets/admin/admin.css', rel='stylesheet')
+  body
+    .navbar(role='navigation')
+      .container.one
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+          a.navbar-brand(href='#') سامانه آموزش مجازی
+      .container.two
+        .navbar-collapse.collapse
+          ul
+              li(class=(title == 'admin' ? 'active' : ''))
+                a(href='/admin') صفحه اصلی
+              li(class=(title == 'users' ? 'active' : ''))
+                a(href='/admin/users') دانشجویان
+              li(class=(title == 'courses' ? 'active' : ''))
+                a(href='/admin/courses') دوره‌ها
+          ul
+              li
+                a(href='/users/logout') خروج از حساب ادمین
+    .container
+      !=messages()
+    block content

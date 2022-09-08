@@ -2,18 +2,16 @@ extends base
 
 block content
   link(href='/stylesheets/home.css', rel='stylesheet')
-  h1 صفحه اصلی
   div(class="main")
-    div(class="course")
-      if courses
-        each course in courses
-          div(class="courseItems")
-            img(src=`${course.image}`)
+    if courses
+      each course in courses
+        div(class="courses")
+          img(src=`${course.image}`)
+          div(class="course")
             h4 دوره آموزشی #{course.name}
-            p #{course.details}
-            div قیمت دوره : 
-              span #{course.price}
-    div(class="content")
-      if contents
-        each content in contents
-          a(href=`/content/${content._id}`) بیشتر...
+            div(class="details")
+              div
+                span #{course.details}
+              div قیمت : 
+                span #{course.price}
+              a(href=`/content/${course.contentID}`) مشاهده دوره

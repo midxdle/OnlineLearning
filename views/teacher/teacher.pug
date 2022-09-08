@@ -1,0 +1,26 @@
+doctype html
+html(lang='fa')
+  head
+    title سامانه آموزش مجازی
+    link(href='/stylesheets/teacher/teacher.css', rel='stylesheet')
+  body
+    .navbar(role='navigation')
+      .container.one
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+          a.navbar-brand(href='#') سامانه آموزش مجازی
+      .container.two
+        .navbar-collapse.collapse
+          ul
+              li(class=(title == 'teacher' ? 'active' : ''))
+                a(href='/teacher') صفحه اصلی
+              li(class=(title == 'contents' ? 'active' : ''))
+                a(href='/teacher/contents') محتواها
+              li(class=(title == 'exams' ? 'active' : ''))
+                a(href='/teacher/exams') آزمون‌ها
+          ul
+              li
+                a(href='/users/logout') خروج از حساب مدرس
+    .container
+      !=messages()
+    block content

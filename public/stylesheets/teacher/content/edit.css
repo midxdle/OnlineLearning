@@ -1,0 +1,72 @@
+h2 {
+  color: white;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background-color: rgb(61, 115, 136);
+  padding: 25px;
+  border: 1px solid rgb(92, 187, 211);
+  border-radius: 5px;
+  width: 100%;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subforms {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.btnform .btn {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 100px;
+  transition: all 0.5s;
+}
+
+.btnform .btn:hover {
+  background-color: rgb(255, 255, 255);
+  color: black;
+  padding: 5px;
+  border-radius: 0px;
+  width: 125px;
+  transition: all 0.5s;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+}
+
+.form-control {
+  width: 250px;
+  margin: 5px;
+  padding: 5px;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(92, 187, 211);
+  border-radius: 5px;
+}
+
+.alert-danger {
+  padding: 5px;
+  margin-bottom: 25px;
+  border: 1px solid;
+  border-radius: 5px;
+  color: #aa3937;
+  background-color: #eeaeae;
+  border-color: #bb1430;
+  list-style: none;
+}

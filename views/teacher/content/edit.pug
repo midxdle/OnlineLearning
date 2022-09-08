@@ -1,0 +1,48 @@
+extends ../teacher
+
+block content
+  link(href='/stylesheets/teacher/content/edit.css', rel='stylesheet')
+  h2.page-header ویرایش محتوا
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  div(class="main")
+    if subcontent
+      form(method='post', action=`/teacher/contents/edit/${subcontent._id}`)
+        div(class="forms")
+          div(class="subforms")
+            .form-group
+              label نام محتوا :
+              input.form-control(name='name', type='text', placeholder=`${subcontent.name}`)
+            .form-group
+              label شماره شناسایی محتوا :
+              input.form-control(name='contentID', type='text', placeholder=`${subcontent.contentID}`)
+            .form-group
+              label کتاب :
+              input.form-control(name='book', type='text', placeholder=`${subcontent.book}`)
+            .form-group
+              label جزوه :
+              input.form-control(name='pdf', type='text', placeholder=`${subcontent.pdf}`)
+            .form-group
+              label ویدئو :
+              input.form-control(name='video', type='text', placeholder=`${subcontent.video}`)
+            .form-group
+              label بستن دسترسی :
+              input.form-control(name='lock', type='boolean', placeholder=`${subcontent.lock}`)
+            .form-group
+              label نام محتوای قبلی :
+              input.form-control(name='prev', type='text', placeholder=`${subcontent.prev}`)
+            .form-group
+              label نمره :
+              input.form-control(name='score', type='text', placeholder=`${subcontent.score}`)
+            .form-group
+              label مدرک :
+              input.form-control(name='certificate', type='boolean', placeholder=`${subcontent.certificate}`)
+            .form-group
+              label تاریخ پایان آزمون :
+              input.form-control(name='endDate', type='date')
+            .form-group
+              label ساعت پایان آزمون :
+              input.form-control(name='endHour', type='time')
+          div(class="btnform")
+            input.btn.btn-primary(type='submit', name='edit', value='تایید')

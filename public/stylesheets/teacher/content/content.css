@@ -1,0 +1,102 @@
+h1 {
+  margin: 25px;
+  color: white;
+}
+
+.main {
+  background-color: rgba(255, 255, 255, 0.205);
+  width: 100%;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+ 
+}
+
+.forms .btn {
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.575);
+  transition: 0.5s;
+  width: 100px;
+}
+
+.forms .btn:hover {
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 5px;
+  margin: 5px;
+  border: 1px solid rgb(92, 43, 155);
+  background-color: rgba(117, 77, 128, 0.781);
+  transition: 0.5s;
+  transform: translateY(5px);
+}
+
+.subs {
+  flex-wrap: wrap;
+  
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.subcontents {
+  border: 1px solid black;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  flex-basis: 30%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(124, 37, 150, 0.404);
+}
+
+.subcontents h4 {
+  border: 1px solid rgba(255, 255, 255, 0.397);
+  padding: 5px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.199);
+  transition: 0.5s;
+}
+
+.subcontents h4:hover {
+  border: 1px solid rgb(255, 255, 255);
+  transform: translateY(-5px);
+  background-color: rgba(255, 255, 255, 0.678);
+  transition: 0.5s;
+  box-shadow: 5px 5px 25px rgb(255, 255, 255),
+              5px 5px 25px rgb(255, 255, 255);
+  cursor: default;
+}
+
+.edit {
+  display: flex;
+  padding: 25px;
+}
+
+.edit .btn {
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.575);
+  transition: 0.5s;
+}
+
+.edit .btn:hover {
+  color: rgb(0, 0, 0);
+  padding: 5px;
+  border-radius: 5px;
+  margin: 5px;
+  border: 1px solid rgb(92, 43, 155);
+  background-color: rgba(255, 255, 255, 0.575);
+  transition: 0.5s;
+  transform: translateY(-5px);
+}

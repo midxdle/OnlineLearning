@@ -1,0 +1,40 @@
+h1 {
+  margin: 25px;
+  color: white;
+}
+
+.main {
+  display: flex;
+  color: white;
+  gap: 25px;
+  flex-wrap:  wrap;
+}
+
+.exam {
+  flex-basis: 30%;
+  background-color: rgba(0, 0, 0, 0.322);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  transition: 0.5s;
+}
+
+.exam:hover {
+  background-color: rgba(0, 0, 0, 0.76);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 5px 5px 25px rgba(231, 21, 21, 0.562),
+              -5px -5px 25px rgba(231, 21, 21, 0.562);
+  transition: 0.5s;
+  transform: translateY(-2px);
+  cursor: default;
+}
+
+.exam h4 {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(231, 21, 21, 0.562);
+  background-color: rgba(231, 21, 21, 0.322);
+}

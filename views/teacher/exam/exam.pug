@@ -1,0 +1,17 @@
+extends ../teacher
+
+block content
+  if errors
+    each error, i in errors
+      div.alert.alert-danger #{error.msg}
+  link(href='/stylesheets/teacher/exam/exam.css', rel='stylesheet')
+  h1 لیست آزمون‌ها
+  div(class="main")
+    if exams
+      each exam in exams
+        div(class="exam")
+          h4 نام آزمون : #{exam.name}
+          h4 شماره شناسایی آزمون : #{exam.contentID}
+          h4 نام آزمون قبلی : 
+            span #{exam.prev}
+
