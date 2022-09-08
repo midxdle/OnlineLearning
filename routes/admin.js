@@ -4,7 +4,6 @@ const course = require("../models/course");
 const content = require("../models/content");
 const user = require("../models/user");
 const buy = require("../models/buy");
-const exam = require("../models/exam");
 const subcontent = require("../models/subcontent");
 
 // admin page
@@ -51,7 +50,7 @@ router.get("/courses/add", ensureAuthenticated, (req, res, next) => {
   res.render("admin/course/add");
 });
 
-// add new course 
+// add new course
 router.post("/courses/add", (req, res, next) => {
   let name = req.body.name;
   let details = req.body.details;
@@ -82,23 +81,31 @@ router.post("/courses/add", (req, res, next) => {
     });
 
     // save new course
-    course.createCourse(newCourse, (err, course) => {
+    course.createCourse(newCourse, (err, courses) => {
       if (err) throw err;
       // make new content
       let newContent = new content({
-        courseID: course._id,
-        name: course.name,
+        courseID: courses._id,
+        name: courses.name,
       });
 
       // save new content
-      content.createContent(newContent, (err) => {
+      content.createContent(newContent, (err, contents) => {
         if (err) throw err;
+        course.updateOne(
+          { _id: courses._id },
+          {
+            contentID: contents._id,
+          },
+          (err) => {
+            if (err) throw err;
+            req.flash("success", "دوره جدید با موفقیت ایجاد شد.");
+            res.location("/admin/courses");
+            res.redirect("/admin/courses");
+          }
+        );
       });
     });
-
-    req.flash("success", "دوره جدید با موفقیت ایجاد شد.");
-    res.location("/admin/courses");
-    res.redirect("/admin/courses");
   }
 });
 
@@ -221,42 +228,15 @@ router.post("/courses/:id", ensureAuthenticated, (req, res, next) => {
             (err, subResults) => {
               if (err) throw err;
               console.log(subResults, "subcontent");
-              // delete exams
-              exam.deleteMany(
-                { contentID: contents._id },
-                (err, examResult) => {
-                  if (err) throw err;
-                  console.log(examResult, "exam");
-                  req.flash("success", "دوره مورد نظر حذف شد.");
-                  res.location("/admin/courses");
-                  res.redirect("/admin/courses");
-                }
-              );
+
+              req.flash("success", "دوره مورد نظر حذف شد.");
+              res.location("/admin/courses");
+              res.redirect("/admin/courses");
             }
           );
         });
       });
     });
-  });
-});
-
-router.get("/contents", ensureAuthenticated, (req, res, next) => {
-  content.find({}, (err, contents) => {
-    subcontent.find({}, (err, subcontents) => {
-      if (err) throw err;
-      res.render("admin/content/content", {
-        title: "contents",
-        contents: contents,
-        subcontents: subcontents,
-      });
-    });
-  });
-});
-
-router.get("/exams", ensureAuthenticated, (req, res, next) => {
-  exam.find({}, (err, exams) => {
-    if (err) throw err;
-    res.render("admin/exam/exam", { title: "exams", exams: exams });
   });
 });
 
