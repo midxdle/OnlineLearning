@@ -50,6 +50,7 @@ router.post("/edit", (req, res, next) => {
   if (errors) {
     res.render("user/edit", {
       errors: errors,
+      user: getUser,
     });
     // just change email and password if username and student number are empty
   } else if (username == "" && studentNumber == "") {
