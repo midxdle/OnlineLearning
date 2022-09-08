@@ -23,6 +23,15 @@ let subcontentSchema = mongoose.Schema({
   prev: {
     type: String,
   },
+  score: {
+    type: String,
+  },
+  certificate: {
+    type: Boolean,
+  },
+  endTime: {
+    type: String,
+  }
 });
 
 let subcontent = (module.exports = mongoose.model(
